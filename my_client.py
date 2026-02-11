@@ -2,25 +2,48 @@ import argparse
 import asyncio
 from fastmcp import Client
 
-async def call_tool(api_key: str, name: str):
-    client = Client(
-        "https://my-service.ngrok.app/mcp",
-        headers={"X-API-Key": api_key}
-    )
-    async with client:
-        result = await client.call_tool("greet", {"name": name})
+
+class MCPClient:
+    def __init__(self, url: str, api_key: str):
+        self.url = url
+        self.api_key = api_key
+
+    async def call_tool(self, tool_name: str, arguments: dict):
+        client = Client(self.url)
+        async with client:
+            result = await client.call_tool(
+                tool_name,
+                arguments,
+                headers={"X-API-Key": self.api_key}
+            )
+            return result
+
+    async def greet(self, name: str):
+        result = await self.call_tool("greet", {"name": name})
         print(result)
 
-def main():
-    parser = argparse.ArgumentParser(description="FastMCP client for calling remote tools")
-    parser.add_argument("--api-key", required=True, help="API key for authentication")
-    parser.add_argument("--name", default="Ford", help="Name to greet (default: Ford)")
-    args = parser.parse_args()
 
-    try:
-        asyncio.run(call_tool(args.api_key, args.name))
-    except Exception as e:
-        print(f"Error: {e}")
+class MCPClientApp:
+    def __init__(self):
+        self.parser = self._create_parser()
+
+    def _create_parser(self):
+        parser = argparse.ArgumentParser(description="FastMCP client for calling remote tools")
+        parser.add_argument("--api-key", required=True, help="API key for authentication")
+        parser.add_argument("--name", default="Ford", help="Name to greet (default: Ford)")
+        parser.add_argument("--url", default="https://my-service.ngrok.app/mcp", help="MCP server URL")
+        return parser
+
+    def run(self):
+        args = self.parser.parse_args()
+        client = MCPClient(args.url, args.api_key)
+
+        try:
+            asyncio.run(client.greet(args.name))
+        except Exception as e:
+            print(f"Error: {e}")
+
 
 if __name__ == "__main__":
-    main()
+    app = MCPClientApp()
+    app.run()
