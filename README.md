@@ -593,19 +593,20 @@ mcp = server.mcp
 
 ```
 mcp-examples/
-├── my_server.py          # MCP server with authentication
-├── my_client.py          # MCP client CLI application
-├── test_my_server.py     # Server unit tests (>95% coverage)
-├── test_my_client.py     # Client unit tests (>95% coverage)
-├── auth.py               # Standalone middleware example (reference)
-├── api_keys.db           # SQLite database (generated on first run)
-├── pyproject.toml        # Project dependencies (uv)
-├── uv.lock               # Dependency lock file
-├── pytest.ini            # Pytest configuration
-├── .coveragerc           # Coverage configuration
-├── CHANGELOG.md          # Version history and changes
-├── CLAUDE.md             # Instructions for Claude Code
-└── README.md             # This file
+├── my_server.py              # MCP server with authentication
+├── my_client.py              # MCP client CLI application
+├── test_my_server.py         # Server unit tests (>95% coverage)
+├── test_my_client.py         # Client unit tests (>95% coverage)
+├── auth.py                   # Standalone middleware example (reference)
+├── api_keys.db               # SQLite database (generated on first run)
+├── pyproject.toml            # Project dependencies (uv)
+├── uv.lock                   # Dependency lock file
+├── pytest.ini                # Pytest configuration
+├── .coveragerc               # Coverage configuration
+├── CHANGELOG.md              # Version history and changes
+├── CLAUDE.md                 # Instructions for Claude Code
+├── KORE_AI_INTEGRATION.md    # Kore AI Agent Platform integration guide
+└── README.md                 # This file
 ```
 
 ## Contributing
@@ -622,12 +623,25 @@ Contributions are welcome! Please ensure:
 
 This project is provided as-is for educational and demonstration purposes.
 
+## Platform Integrations
+
+### Kore AI Agent Platform
+
+This MCP server can be integrated with the Kore AI Agent Platform to provide tools for AI agents. See **[KORE_AI_INTEGRATION.md](KORE_AI_INTEGRATION.md)** for a comprehensive guide including:
+
+- Deployment options (ngrok, Docker, cloud platforms)
+- Step-by-step Kore AI configuration
+- Authentication setup
+- Testing procedures
+- Troubleshooting and best practices
+
 ## Resources
 
 - [FastMCP Documentation](https://github.com/jlowin/fastmcp)
 - [Model Context Protocol Specification](https://spec.modelcontextprotocol.io/)
 - [uv Package Manager](https://github.com/astral-sh/uv)
 - [SQLite Documentation](https://www.sqlite.org/docs.html)
+- [Kore AI Documentation](https://docs.kore.ai)
 
 ## Support
 
