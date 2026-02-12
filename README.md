@@ -1,4 +1,4 @@
-# MCP Examples
+# MCP Example
 
 A production-ready implementation of Model Context Protocol (MCP) server and client using FastMCP with SQLite-backed API key authentication.
 
