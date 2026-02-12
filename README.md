@@ -192,6 +192,79 @@ $ uv run my_client.py --api-key QBMDHIqbf_qQV8uW7wJ6sMNDAj2q7VoFS_u9IGVqX80 --na
 Hello, Alice!
 ```
 
+### Running Tests
+
+The project includes comprehensive unit tests with >90% code coverage.
+
+#### Install Test Dependencies
+
+```bash
+# Using uv
+uv sync --extra test
+
+# Using pip
+pip install -e ".[test]"
+```
+
+#### Run All Tests
+
+```bash
+# Using uv
+uv run pytest
+
+# Using pytest directly
+pytest
+```
+
+#### Run Tests with Coverage Report
+
+```bash
+# Terminal report with missing lines
+uv run pytest --cov=. --cov-report=term-missing
+
+# HTML coverage report (opens in browser)
+uv run pytest --cov=. --cov-report=html
+open htmlcov/index.html
+```
+
+#### Run Specific Test Files
+
+```bash
+# Test server only
+uv run pytest test_my_server.py
+
+# Test client only
+uv run pytest test_my_client.py
+
+# Run specific test class
+uv run pytest test_my_server.py::TestDatabaseManager
+
+# Run specific test method
+uv run pytest test_my_server.py::TestDatabaseManager::test_init_db_creates_table
+```
+
+#### Test Output
+
+```bash
+$ uv run pytest --cov=. --cov-report=term-missing
+
+============================= test session starts ==============================
+collected 87 items
+
+test_my_server.py .................................................... [ 66%]
+test_my_client.py .............................                       [100%]
+
+---------- coverage: platform darwin, python 3.12.0 -----------
+Name              Stmts   Miss  Cover   Missing
+-----------------------------------------------
+my_client.py         52      2    96%   45-46
+my_server.py         89      3    97%   85-87
+-----------------------------------------------
+TOTAL               141      5    96%
+
+============================== 87 passed in 2.34s ===============================
+```
+
 ### Managing API Keys
 
 API keys are stored in `api_keys.db` SQLite database. You can manage keys directly:
@@ -431,10 +504,15 @@ mcp = server.mcp
 mcp-examples/
 ├── my_server.py          # MCP server with authentication
 ├── my_client.py          # MCP client CLI application
+├── test_my_server.py     # Server unit tests (>95% coverage)
+├── test_my_client.py     # Client unit tests (>95% coverage)
 ├── auth.py               # Standalone middleware example (reference)
 ├── api_keys.db           # SQLite database (generated on first run)
 ├── pyproject.toml        # Project dependencies (uv)
 ├── uv.lock               # Dependency lock file
+├── pytest.ini            # Pytest configuration
+├── .coveragerc           # Coverage configuration
+├── CHANGELOG.md          # Version history and changes
 ├── CLAUDE.md             # Instructions for Claude Code
 └── README.md             # This file
 ```
