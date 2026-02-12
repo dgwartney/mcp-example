@@ -5,6 +5,9 @@ This module implements a Model Context Protocol (MCP) server using the FastMCP
 library with middleware-based authentication. API keys are stored and validated
 against a SQLite database.
 
+Author:
+    David Gwartney <david.gwartney@gmail.com>
+
 Example:
     Run the server directly:
         $ python my_server.py

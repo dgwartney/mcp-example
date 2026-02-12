@@ -2,6 +2,8 @@
 
 A production-ready implementation of Model Context Protocol (MCP) server and client using FastMCP with SQLite-backed API key authentication.
 
+**Author:** David Gwartney (david.gwartney@gmail.com)
+
 ## Overview
 
 This project demonstrates how to build secure MCP servers and clients with:

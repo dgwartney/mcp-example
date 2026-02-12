@@ -5,6 +5,9 @@ This module implements a client for the Model Context Protocol (MCP) using
 the FastMCP library. It demonstrates how to connect to a remote MCP server,
 authenticate using API keys via HTTP headers, and invoke server-side tools.
 
+Author:
+    David Gwartney <david.gwartney@gmail.com>
+
 Example:
     Basic usage with required API key:
         $ python my_client.py --api-key YOUR_API_KEY

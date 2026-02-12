@@ -1,8 +1,11 @@
 [project]
 name = "mcp-examples"
 version = "0.1.0"
-description = "Add your description here"
+description = "Production-ready MCP server and client with SQLite-backed API key authentication"
 readme = "README.md"
+authors = [
+    {name = "David Gwartney", email = "david.gwartney@gmail.com"}
+]
 requires-python = ">=3.12"
 dependencies = [
     "fastmcp>=2.14.5",
