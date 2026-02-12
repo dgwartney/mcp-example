@@ -45,7 +45,11 @@ class ApiKeyMiddleware(Middleware):
 
     async def on_request(self, context: MiddlewareContext, call_next):
         headers = get_http_headers()
-        api_key = headers.get("X-API-Key")
+
+        # HTTP headers are case-insensitive per RFC 7230
+        # Create a case-insensitive lookup
+        headers_lower = {k.lower(): v for k, v in headers.items()}
+        api_key = headers_lower.get("x-api-key")
 
         if not self.db_manager.validate_key(api_key):
             raise ToolError("Unauthorized: Invalid or missing API Key")

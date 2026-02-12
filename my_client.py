@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 from fastmcp import Client
+from fastmcp.client.transports import StreamableHttpTransport
 
 
 class MCPClient:
@@ -9,13 +10,13 @@ class MCPClient:
         self.api_key = api_key
 
     async def call_tool(self, tool_name: str, arguments: dict):
-        client = Client(self.url)
+        transport = StreamableHttpTransport(
+            self.url,
+            headers={"X-API-Key": self.api_key}
+        )
+        client = Client(transport)
         async with client:
-            result = await client.call_tool(
-                tool_name,
-                arguments,
-                headers={"X-API-Key": self.api_key}
-            )
+            result = await client.call_tool(tool_name, arguments)
             return result
 
     async def greet(self, name: str):
