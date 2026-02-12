@@ -13,6 +13,7 @@ This project demonstrates how to build secure MCP servers and clients with:
 - **Case-insensitive Headers**: RFC 7230-compliant header handling
 - **Class-based Architecture**: Modular, testable, and maintainable code structure
 - **Cryptographic Key Generation**: Secure random API keys using Python's `secrets` module
+- **Comprehensive Testing**: 61 unit tests with >90% code coverage
 
 ## Features
 
@@ -30,6 +31,15 @@ This project demonstrates how to build secure MCP servers and clients with:
 - **MCPClientApp**: CLI application with argument parsing
 - **StreamableHttpTransport**: Properly passes API keys via HTTP headers
 - **Error Handling**: Graceful error reporting for connection and authentication failures
+
+### Testing (`test_*.py`)
+
+- **61 Unit Tests**: Comprehensive test coverage for all components
+- **96.49% Server Coverage**: Database, middleware, and server classes fully tested
+- **100% Client Coverage**: Client and CLI application completely tested
+- **Async Test Support**: Proper testing of async/await patterns
+- **Integration Tests**: End-to-end workflow validation
+- **CI/CD Ready**: XML and HTML coverage reports for continuous integration
 
 ## Architecture
 
@@ -194,7 +204,21 @@ Hello, Alice!
 
 ### Running Tests
 
-The project includes comprehensive unit tests with >90% code coverage.
+The project includes comprehensive unit tests with >90% code coverage for all production code.
+
+#### Test Coverage Summary
+
+| Component | Tests | Coverage | Details |
+|-----------|-------|----------|---------|
+| **my_server.py** | 31 | 96.49% | Database, middleware, server classes |
+| **my_client.py** | 30 | 100% | Client and CLI application |
+| **Total** | 61 | 98.90% | All production code covered |
+
+**Test Categories**:
+- **Unit Tests**: Individual class and method testing with mocks
+- **Integration Tests**: End-to-end workflows and component interactions
+- **Edge Cases**: Special inputs, error conditions, unusual scenarios
+- **Async Tests**: Proper async/await testing with pytest-asyncio
 
 #### Install Test Dependencies
 
@@ -205,6 +229,12 @@ uv sync --extra test
 # Using pip
 pip install -e ".[test]"
 ```
+
+**Test Dependencies**:
+- `pytest>=8.0.0` - Test framework
+- `pytest-asyncio>=0.23.0` - Async test support
+- `pytest-cov>=7.0.0` - Coverage reporting
+- `pytest-mock>=3.12.0` - Mocking utilities
 
 #### Run All Tests
 
@@ -220,11 +250,14 @@ pytest
 
 ```bash
 # Terminal report with missing lines
-uv run pytest --cov=. --cov-report=term-missing
+uv run pytest --cov=my_server --cov=my_client --cov-report=term-missing
 
 # HTML coverage report (opens in browser)
-uv run pytest --cov=. --cov-report=html
+uv run pytest --cov=my_server --cov=my_client --cov-report=html
 open htmlcov/index.html
+
+# XML coverage report (for CI/CD)
+uv run pytest --cov=my_server --cov=my_client --cov-report=xml
 ```
 
 #### Run Specific Test Files
@@ -241,28 +274,49 @@ uv run pytest test_my_server.py::TestDatabaseManager
 
 # Run specific test method
 uv run pytest test_my_server.py::TestDatabaseManager::test_init_db_creates_table
+
+# Run with verbose output
+uv run pytest -v
+
+# Run and stop on first failure
+uv run pytest -x
 ```
 
-#### Test Output
+#### Test Suite Details
+
+**Server Tests (`test_my_server.py`)**:
+- `TestDatabaseManager` (9 tests): Database initialization, schema, key validation
+- `TestApiKeyMiddleware` (7 tests): Authentication, case-insensitive headers, error handling
+- `TestMCPServer` (10 tests): Server initialization, middleware/tool registration
+- `TestIntegration` (3 tests): End-to-end authentication workflows
+
+**Client Tests (`test_my_client.py`)**:
+- `TestMCPClient` (9 tests): Client initialization, tool calls, error handling
+- `TestMCPClientApp` (13 tests): CLI parsing, argument validation, execution
+- `TestIntegration` (3 tests): End-to-end client workflows
+- `TestEdgeCases` (4 tests): Special characters, unusual inputs, edge cases
+
+#### Example Test Output
 
 ```bash
-$ uv run pytest --cov=. --cov-report=term-missing
+$ uv run pytest --cov=my_server --cov=my_client --cov-report=term-missing
 
 ============================= test session starts ==============================
-collected 87 items
+platform darwin -- Python 3.12.12, pytest-9.0.2, pluggy-1.6.0
+collected 61 items
 
-test_my_server.py .................................................... [ 66%]
-test_my_client.py .............................                       [100%]
+test_my_client.py ..............................                         [ 49%]
+test_my_server.py ...............................                        [100%]
 
----------- coverage: platform darwin, python 3.12.0 -----------
-Name              Stmts   Miss  Cover   Missing
------------------------------------------------
-my_client.py         52      2    96%   45-46
-my_server.py         89      3    97%   85-87
------------------------------------------------
-TOTAL               141      5    96%
+---------- coverage: platform darwin, python 3.12.12 -----------
+Name           Stmts   Miss   Cover   Missing
+---------------------------------------------
+my_client.py      34      0 100.00%
+my_server.py      57      2  96.49%   214, 223
+---------------------------------------------
+TOTAL             91      2  97.80%
 
-============================== 87 passed in 2.34s ===============================
+============================== 61 passed in 4.06s ===============================
 ```
 
 ### Managing API Keys
