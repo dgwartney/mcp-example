@@ -289,6 +289,25 @@ class TestMCPServer:
 
             mock_init_db.assert_called_once()
 
+    def test_init_with_env_var(self, temp_db_path, monkeypatch):
+        """Test MCPServer initialization with MCP_DB_PATH environment variable."""
+        monkeypatch.setenv("MCP_DB_PATH", temp_db_path)
+
+        with patch.object(DatabaseManager, 'init_db'):
+            server = MCPServer()
+
+            assert server.db_manager.db_path == temp_db_path
+
+    def test_init_env_var_overridden_by_parameter(self, temp_db_path, monkeypatch):
+        """Test that db_path parameter takes precedence over environment variable."""
+        monkeypatch.setenv("MCP_DB_PATH", "/tmp/env_path.db")
+
+        with patch.object(DatabaseManager, 'init_db'):
+            server = MCPServer(db_path=temp_db_path)
+
+            assert server.db_manager.db_path == temp_db_path
+            assert server.db_manager.db_path != "/tmp/env_path.db"
+
     def test_middleware_registered(self, temp_db_path):
         """Test that ApiKeyMiddleware is registered on initialization."""
         with patch.object(DatabaseManager, 'init_db'):

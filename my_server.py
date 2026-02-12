@@ -8,15 +8,22 @@ against a SQLite database.
 Author:
     David Gwartney <david.gwartney@gmail.com>
 
+Environment Variables:
+    MCP_DB_PATH: Optional path to SQLite database file.
+                 Defaults to api_keys.db in the script's directory if not set.
+
 Example:
     Run the server directly:
-        $ python my_server.py
+        $ uv run my_server.py
 
     Run via FastMCP CLI:
-        $ fastmcp run my_server.py
+        $ uv run fastmcp run my_server.py
 
     Run as HTTP server:
-        $ fastmcp run my_server.py --transport http --port 8000
+        $ uv run fastmcp run my_server.py --transport http --port 8000
+
+    Run with custom database path:
+        $ MCP_DB_PATH=/var/data/keys.db uv run my_server.py
 """
 
 import os
@@ -180,11 +187,15 @@ class MCPServer:
         Args:
             name (str, optional): Name of the MCP server. Defaults to "MyMCP".
             db_path (Optional[str], optional): Path to the SQLite database.
-                If None, creates api_keys.db in the script's directory.
+                If None, checks MCP_DB_PATH environment variable.
+                If not set, defaults to api_keys.db in the script's directory.
                 Defaults to None.
         """
         if db_path is None:
-            db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "api_keys.db")
+            db_path = os.environ.get(
+                "MCP_DB_PATH",
+                os.path.join(os.path.dirname(os.path.abspath(__file__)), "api_keys.db")
+            )
 
         self.db_manager = DatabaseManager(db_path)
         self.db_manager.init_db()

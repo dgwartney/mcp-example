@@ -100,6 +100,24 @@ This project demonstrates how to build secure MCP servers and clients with:
 - `uv` package manager (handles all dependencies and virtual environments)
 - FastMCP 2.14.5+ (installed via uv)
 
+## Configuration
+
+### Environment Variables
+
+| Variable | Description | Default | Example |
+|----------|-------------|---------|---------|
+| `MCP_DB_PATH` | Path to SQLite database file | `api_keys.db` in project directory | `/var/data/keys.db` |
+
+**Usage**:
+```bash
+# Set for single command
+MCP_DB_PATH=/tmp/keys.db uv run my_server.py
+
+# Export for session
+export MCP_DB_PATH=/var/data/api_keys.db
+uv run my_server.py
+```
+
 ## Installation
 
 This project uses `uv` for Python package management and virtual environment handling.
@@ -153,6 +171,18 @@ Generated default API key: QBMDHIqbf_qQV8uW7wJ6sMNDAj2q7VoFS_u9IGVqX80
 ```
 
 **Save this key!** You'll need it for client authentication.
+
+#### Database Path Configuration
+
+By default, the server creates `api_keys.db` in the project directory. You can customize this location using the `MCP_DB_PATH` environment variable:
+
+```bash
+# Use custom database path
+MCP_DB_PATH=/var/data/api_keys.db uv run my_server.py
+
+# Use database in /tmp
+MCP_DB_PATH=/tmp/mcp_keys.db uv run my_server.py
+```
 
 #### Option 2: HTTP Transport (for remote clients)
 
@@ -347,7 +377,12 @@ sqlite3 api_keys.db "DELETE FROM api_keys WHERE key = 'KEY_TO_REVOKE';"
    uv run fastmcp run my_server.py --transport http --port 8000
    ```
 
-2. Test with the client:
+2. (Optional) Use custom database location:
+   ```bash
+   MCP_DB_PATH=/tmp/dev_keys.db uv run fastmcp run my_server.py --transport http --port 8000
+   ```
+
+3. Test with the client:
    ```bash
    uv run my_client.py --api-key YOUR_API_KEY --url http://localhost:8000/mcp
    ```
@@ -413,8 +448,14 @@ Build and run:
 # Build image
 docker build -t mcp-server .
 
-# Run container
+# Run container with volume mount
 docker run -p 8000:8000 -v $(pwd)/api_keys.db:/app/api_keys.db mcp-server
+
+# Or run with custom database path via environment variable
+docker run -p 8000:8000 \
+  -e MCP_DB_PATH=/data/keys.db \
+  -v $(pwd)/data:/data \
+  mcp-server
 ```
 
 ### Cloud Deployment
@@ -428,7 +469,10 @@ The server can be deployed to any cloud platform that supports Python applicatio
    web: uv run fastmcp run my_server.py --transport http --port $PORT --host 0.0.0.0
    ```
 
-2. Push to your platform's git repository or use their CLI tools
+2. Set environment variables in your platform:
+   - `MCP_DB_PATH` (optional): Custom database path, e.g., `/data/api_keys.db`
+
+3. Push to your platform's git repository or use their CLI tools
 
 #### AWS Lambda / Google Cloud Functions
 
