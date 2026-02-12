@@ -97,35 +97,44 @@ This project demonstrates how to build secure MCP servers and clients with:
 ## Requirements
 
 - Python 3.12+
-- `uv` package manager (recommended) or `pip`
-- FastMCP 2.14.5+
+- `uv` package manager (handles all dependencies and virtual environments)
+- FastMCP 2.14.5+ (installed via uv)
 
 ## Installation
 
-### Using uv (Recommended)
+This project uses `uv` for Python package management and virtual environment handling.
+
+### Install uv
 
 ```bash
-# Install uv if not already installed
+# macOS and Linux
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
+# Windows
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# Or via Homebrew (macOS)
+brew install uv
+
+# Or via pip
+pip install uv
+```
+
+### Clone and Setup
+
+```bash
 # Clone the repository
 git clone <repository-url>
 cd mcp-examples
 
-# Install dependencies
+# Install dependencies (creates virtual environment automatically)
 uv sync
+
+# Install with test dependencies
+uv sync --extra test
 ```
 
-### Using pip
-
-```bash
-# Create virtual environment
-python3.12 -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
+**Note**: `uv` automatically creates and manages the virtual environment in `.venv/`. No manual virtual environment creation is needed.
 
 ## Usage
 
@@ -134,11 +143,7 @@ pip install -r requirements.txt
 #### Option 1: Direct Python Execution (stdio transport)
 
 ```bash
-# Using uv
 uv run my_server.py
-
-# Using python directly
-python my_server.py
 ```
 
 On first run, the server will generate a default API key and print it to stdout:
@@ -172,11 +177,7 @@ The client requires an API key for authentication. Use the key printed by the se
 #### Basic Usage
 
 ```bash
-# Using uv
 uv run my_client.py --api-key YOUR_API_KEY_HERE
-
-# Using python directly
-python my_client.py --api-key YOUR_API_KEY_HERE
 ```
 
 #### Custom Parameters
@@ -223,11 +224,7 @@ The project includes comprehensive unit tests with >90% code coverage for all pr
 #### Install Test Dependencies
 
 ```bash
-# Using uv
 uv sync --extra test
-
-# Using pip
-pip install -e ".[test]"
 ```
 
 **Test Dependencies**:
@@ -239,11 +236,7 @@ pip install -e ".[test]"
 #### Run All Tests
 
 ```bash
-# Using uv
 uv run pytest
-
-# Using pytest directly
-pytest
 ```
 
 #### Run Tests with Coverage Report

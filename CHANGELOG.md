@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Documentation**
   - Comprehensive README.md with:
     - Architecture diagram
-    - Installation instructions (uv and pip)
+    - Installation instructions using uv
     - Usage examples for server and client
     - API key management guide
     - Deployment options (local, ngrok, Docker, cloud)
